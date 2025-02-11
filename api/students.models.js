@@ -46,7 +46,7 @@ const studentSchema = new mongoose.Schema(
     payment: {
       //image
       type: String,
-      required: true,
+      // required: true,
     },
     collegeName: {
       type: String,
@@ -66,4 +66,4 @@ const studentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("sristipirates", studentSchema);
+module.exports = mongoose.model("sristipiratestesting", studentSchema);
