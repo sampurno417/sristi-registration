@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const student = require("./students.models.js");
 const sendMail = require("./confirmationMail.js");
+require('dotenv').config();
 
 // const generateStudentId = () => {
 //   const timestamp = Date.now();
@@ -13,7 +14,7 @@ const sendMail = require("./confirmationMail.js");
 const registerStudent = async (req, res) => {
   try {
     //console.log("request is:", req);
-    console.log("Incoming payload:", req.body); // Log the request payload
+    // console.log("Incoming payload:", req.body); // Log the request payload
 
     // Create a new student record
     const findStudent = await student.findOne({ email: req.body.email })||
@@ -29,11 +30,12 @@ const registerStudent = async (req, res) => {
       phone: req.body.phone,
       email: req.body.email,
       event: req.body.event,
-      payment: req.body.payment,
       amount: req.body.amount,
       college: req.body.college,
       collegeName: req.body.collegeName,
-      isVerified: req.body.isVerified,
+      orderId:req.body.orderId,
+      paymentId:req.body.paymentId,
+      signature:req.body.signature,
     });
 
         // Save the data and send a success response
@@ -50,8 +52,21 @@ const registerStudent = async (req, res) => {
     }
 };
 
+const getENV=async(req,res)=>{
+ try{
+  const envfiles={
+    api_key: process.env.RAZORPAY_KEY_ID
+  }
+  return res.status(200).json(envfiles);
+ }
+ catch(error){
+  res.status(500).json("error",error);
+ }
+}
+
 // Define the POST route
 router.route("/").post(registerStudent);
+router.route("/token").get(getENV);
 router.route("/sendmail/:id").post(sendMail);
 
 module.exports = router;

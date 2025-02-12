@@ -43,27 +43,24 @@ const studentSchema = new mongoose.Schema(
       type: String,
       enum: ["event1", "event2", "both", "selected"],
     },
-    payment: {
-      //image
-      type: String,
-      required: true,
-    },
     collegeName: {
       type: String,
       required: true,
     },
-    isPaid: {
-      type: Boolean,
-      default: false,
-      required: true,
+    orderId:{
+      type:String,
+      required:true,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-      required: true,
+    paymentId:{
+      type:String,
+      required:true,
     },
+    signature:{
+      type:String,
+      required:true,
+    }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("sristipirates", studentSchema);
+module.exports = mongoose.model("sristipiratestesting", studentSchema);
