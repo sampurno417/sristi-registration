@@ -116,70 +116,53 @@
             loadingAnimation.play();
 
             try {
-        const response = await fetch("http://localhost:4000/payment/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: formData.amount }),
-        });
+              const uploadData = await uploadToCloudinary(paymentInput);
+              formData.payment = uploadData.secure_url;
 
-        const paymentData = await response.json();
-        if (!response.ok) {
-          throw new Error("Failed to initiate payment");
-        }
+              console.log("formData", formData);
 
-        const options = {
-          key: "rzp_test_mEtMCuqx6MkbMi",
-          amount: paymentData.amount,
-          currency: "INR",
-          name: "Sristi 2025",
-          description: "Event Registration Fee",
-          order_id: paymentData.orderId,
-          handler: async function (response) {
-            formData.paymentId = response.razorpay_payment_id;
-            formData.orderId = response.razorpay_order_id;
-            formData.signature = response.razorpay_signature;
+              const response = await fetch(
+                "https://sristi-registration-backend.vercel.app/",
+               // "http://localhost:4000",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                }
+              );
 
-            const verifyResponse = await fetch("http://localhost:4000/payment/verify-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(formData),
-            });
-
-            const verifyData = await verifyResponse.json();
-            if (verifyResponse.ok) {
-              const mailResponse = await fetch(`http://localhost:4000/sendmail/${formData.email}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: verifyData.id }),
-              });
-
-              if (mailResponse.ok) {
+              //starting of mail part
+              const data = await response.json();
+              if (response.ok) {
+                const response = await fetch(
+                  `https://sristi-registration-backend.vercel.app/sendmail/${formData.email}/`,
+                  // `http://localhost:4000/sendmail/${formData.email}`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: data.id }),
+                  }
+                );
                 alert("Registration successful!");
+                console.log(response);
                 resetFormFields();
-                window.location.href = "confirmation.html";
+                setTimeout(function() {
+        window.location.href = "confirmation.html";
+    },);
+              } else if (response.status == 400) {
+                alert("User Already Registered!");
               } else {
-                alert("Failed to send confirmation email.");
+                alert("Failed to submit the form.");
               }
-            } else {
-              alert("Payment verification failed.");
+            } catch (error) {
+              console.error("Error:", error);
+              alert("An error occurred. Please try again.");
+            } finally {
+              // Hide loading animation
+              loadingAnimation.stop();
+              document.getElementById("loading-overlay").style.display = "none";
             }
-          },
-          prefill: {
-            name: formData.name,
-            email: formData.email,
-            contact: formData.phone,
-          },
-          theme: { color: "#3399cc" },
-        };
-
-        const rzp = new Razorpay(options);
-        rzp.open();
-      } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred. Please try again.");
-      }
-      });
-
+          });
 
         function resetFormFields() {
           window.location.href = "confirmation.html";
@@ -196,27 +179,27 @@
     }, 1000);
         }
 
-      //   async function uploadToCloudinary(file) {
-      //     const formData = new FormData();
-      //     formData.append("file", file);
-      //     formData.append("upload_preset", "payment_proof");
-      //     formData.append("cloud_name", "ddtatnwwv");
+        async function uploadToCloudinary(file) {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "payment_proof");
+          formData.append("cloud_name", "ddtatnwwv");
 
-      //     const response = await fetch(
-      //       "https://api.cloudinary.com/v1_1/ddtatnwwv/image/upload",
-      //       {
-      //         method: "POST",
-      //         body: formData,
-      //       }
-      //     );
-      //     if (response.status == 400){
-      //       alert("Faild to upload image");
-      //       throw new Error("Failed to upload image");
-      //     }
+          const response = await fetch(
+            "https://api.cloudinary.com/v1_1/ddtatnwwv/image/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          if (response.status == 400){
+            alert("Faild to upload image");
+            throw new Error("Failed to upload image");
+          }
 
-      //     return await response.json();
-      //   }
-       });
+          return await response.json();
+        }
+      });
     </script>
 
     <style>
