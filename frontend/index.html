@@ -27,7 +27,7 @@
             eventContainer.style.display = "none";
             eventSelect.removeAttribute("required");
             note.textContent =
-              "Participation Fee: ₹800 (Additional Convinience Fee:₹20)";
+              "Participation Fee: ₹800 + 2.36% GST & tax";
             additional.textContent = "";
             // payNowContainer.innerHTML =
             //   '<a href="upi://pay?pa=sristijgec@sbi&pn=SRISTIJALPAIGURI%20GOVT%20ENGG%20COLLEGE&mc=8220&tr=&tn=&am=800&cu=INR&url=&mode=02&purpose=00&orgid=180102&sign=MEQCIBpUcu1IGX07X7+IPlV6AYfA43SSwUaV/VV+19w2cIRNAiA0qD2s6BqIza4HZhd9M2SPsSdCp8ShUlbDql6V7SviQQ==" class="pay-now-btn">PAY NOW</a>';
@@ -39,25 +39,22 @@
             eventSelect.setAttribute("required", "required");
             note.textContent =
               "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800";
-            additional.textContent =
-              "Additional Convinience Fee: ₹13(Event 1 or 2) and ₹20(Both) ";
+            
 
             eventSelect.addEventListener("change", function () {
               if (eventSelect.value === "both") {
-                note.textContent = "Participation Fee: ₹820";
+                note.textContent = "Participation Fee: ₹800 + 2.36% GST & tax";
                 additional.textContent = "";
               } else if (
                 eventSelect.value === "event1" ||
                 eventSelect.value === "event2"
               ) {
-                note.textContent = "Participation Fee: ₹513";
+                note.textContent = "Participation Fee: ₹500 + 2.36% GST & tax";
                 additional.textContent = "";
               } else {
                 note.textContent =
                   "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800";
-                additional.innerHTML =
-                  "Additional convinience fee: ₹13 (for Event 1 or 2) & ₹20 (for Both)";
-                // qrPayment.innerHTML = "";
+                
               }
             });
           }
@@ -230,7 +227,7 @@
             "none";
           document.getElementById("event-container").style.display = "block";
           document.querySelector(".note").textContent =
-            "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800. Additional convinience fee: ₹13 (for Event 1 or 2) & ₹20 (for Both)";
+            "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800";
 
           document.getElementById("fileName").textContent = "";
           setTimeout(function () {
@@ -400,9 +397,9 @@
           <p class="note">
             Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800
           </p>
-          <p id="additional" class="note">
+          <!-- <p id="additional" class="note">
             Additional Convinience Fee: ₹13(Event 1 or 2) and ₹20(Both)
-          </p>
+          </p> -->
 
           <!-- <div class="label-item">
             <label for="payment">Upload Payment Screenshot</label>
