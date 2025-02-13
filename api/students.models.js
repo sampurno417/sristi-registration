@@ -32,12 +32,12 @@ const studentSchema = new mongoose.Schema(
     phone: {
       type: Number,
       required: true,
-      unique: true,
+      // unique: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     event: {
       type: String,
