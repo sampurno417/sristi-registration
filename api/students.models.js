@@ -68,4 +68,4 @@ const studentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("sristipiratestesting", studentSchema);
+module.exports = mongoose.model("sristipirates", studentSchema);
