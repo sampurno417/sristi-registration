@@ -10,6 +10,8 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
+      
+
       document.addEventListener("DOMContentLoaded", function () {
         const eventSelect = document.getElementById("event");
         const eventContainer = document.getElementById("event-container");
@@ -17,29 +19,32 @@
         const additional = document.getElementById("additional");
         // const payNowContainer = document.getElementById("pay-now-container");
         const collegeSelect = document.getElementById("college");
+        const textContainer=document.getElementById("text-container");
         const collegeInputContainer = document.getElementById(
           "college-input-container"
         );
+        const otherCollegeEvent=document.getElementById("event-container-other");
+        const totalAmount = document.getElementById("total");
 
         collegeSelect.addEventListener("change", function () {
+          textContainer.style.display="block";
           if (collegeSelect.value === "other") {
             collegeInputContainer.style.display = "block";
+            otherCollegeEvent.style.display="block";
+            totalAmount.style.display="block";
             eventContainer.style.display = "none";
             eventSelect.removeAttribute("required");
-            note.textContent =
-              "Participation Fee: ₹800 + 2.36% GST & tax";
+            note.textContent = "";
             additional.textContent = "";
-            // payNowContainer.innerHTML =
-            //   '<a href="upi://pay?pa=sristijgec@sbi&pn=SRISTIJALPAIGURI%20GOVT%20ENGG%20COLLEGE&mc=8220&tr=&tn=&am=800&cu=INR&url=&mode=02&purpose=00&orgid=180102&sign=MEQCIBpUcu1IGX07X7+IPlV6AYfA43SSwUaV/VV+19w2cIRNAiA0qD2s6BqIza4HZhd9M2SPsSdCp8ShUlbDql6V7SviQQ==" class="pay-now-btn">PAY NOW</a>';
-            // qrPayment.innerHTML =
-            //   '<img src="./assets/pay-800-sristi.svg" class="qr-img"/>';
+            
           } else {
             collegeInputContainer.style.display = "none";
+            otherCollegeEvent.style.display="none";
+            totalAmount.style.display="none";
             eventContainer.style.display = "block";
             eventSelect.setAttribute("required", "required");
             note.textContent =
               "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800";
-            
 
             eventSelect.addEventListener("change", function () {
               if (eventSelect.value === "both") {
@@ -54,7 +59,6 @@
               } else {
                 note.textContent =
                   "Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800";
-                
               }
             });
           }
@@ -89,16 +93,35 @@
               // event: document.getElementById("event").value,
             };
 
-            formData.event =
+            
+
+            if(document.getElementById("college").value==="jgec"){
+              event =
               document.getElementById("event").value === ""
                 ? "selected"
                 : document.getElementById("event").value;
 
-            formData.amount =
-              document.getElementById("event").value === "both" ||
-              document.getElementById("college").value !== "jgec"
-                ? 820
-                : 513;
+
+            formData.amount = document.getElementById("event").value === "both" ? 820 : 513;
+            formData.event=event;
+            // console.log(formData.amount);
+            }
+            else{
+              var eventButtons = document.querySelectorAll(".checkbox");
+              var events="";
+              eventButtons.forEach(button=>{
+            if(button.classList.contains('selected')) {
+              //console.log(button.getAttribute("data"));
+              events+= button.getAttribute("data")+", ";
+            }
+            formData.event=events;
+            //console.log(formData.event);
+            formData.amount=parseInt(document.getElementById("totalAmount").textContent);
+            //console.log(formData.amount);
+            
+        });
+            }
+                
 
             formData.collegeName =
               document.getElementById("college").value === "jgec"
@@ -125,10 +148,13 @@
                 throw new Error("Failed to initiate payment");
               }
 
-              const apiData = await fetch("https://sristi-registration-backend.vercel.app/token", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-              });
+              const apiData = await fetch(
+                "https://sristi-registration-backend.vercel.app/token",
+                {
+                  method: "GET",
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
 
               if (!apiData.ok) {
                 throw new Error("Failed to fetch API data");
@@ -155,7 +181,7 @@
                   formData.signature = verifyInfo.razorpay_signature;
 
                   const verifyResponse = await fetch(
-                    "https://sristi-registration-backend.vercel.app/payment/verify-payment",
+                    "http://localhost:4000/payment/verify-payment",
                     {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
@@ -169,7 +195,7 @@
                     // console.log("formData", formData);
                     const formResponse = await fetch(
                       "https://sristi-registration-backend.vercel.app/",
-                      // "http://localhost:4000/",
+                      //"http://localhost:4000/",
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -280,6 +306,7 @@
     </style>
   </head>
   <body>
+    
     <div id="loading-overlay">
       <div id="loading-animation"></div>
     </div>
@@ -384,7 +411,7 @@
             />
           </div>
 
-          <div id="event-container" class="label-item">
+          <div id="event-container" class="label-item hidden" >
             <label for="event">Select Event</label>
             <select id="event" name="event" required>
               <option value="">-- Choose an event --</option>
@@ -394,9 +421,42 @@
             </select>
           </div>
 
-          <p class="note">
-            Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800
-          </p>
+          <div id="event-container-other" class="label-item hidden">
+            <label for="event-other-college">Select Event</label>
+            <div class="checkbox-container">
+              <button type="button" class="checkbox" value="200" data="code chronicles" onclick="selectButton(this)">
+                CODE CHRONICLES - ₹200
+              </button>
+              <button type="button" class="checkbox" value="500" data="mazemerise & robosoccer" onclick="selectButton(this)">
+                MAZEMERISE & ROBOSOCCER - ₹500
+              </button>
+              <button type="button" class="checkbox" value="200" data="css battle" onclick="selectButton(this)">
+                CSS BATTLE - ₹200
+              </button>
+              <button type="button" class="checkbox" value="500" data="techzibition" onclick="selectButton(this)">
+                TECHZIBITION - ₹500
+              </button>
+              <button type="button" class="checkbox" value="100" data="mathemania" onclick="selectButton(this)">
+                MATHEMANIA - ₹100
+              </button>
+              <button
+                type="button"
+                class="checkbox all-button"
+                value="1200"
+                data="all"
+                onclick="selectAll(this)"
+              >
+                ALL - ₹1200
+              </button>
+            </div>
+          </div>
+
+          <div id="text-container">
+            <p class="note">
+              Participation Fee: Event 1 or 2 - ₹500, Both (1+2) - ₹800
+            </p>
+            <div id="total">Total: ₹<span id="totalAmount">0</span></div>
+          </div>
           <!-- <p id="additional" class="note">
             Additional Convinience Fee: ₹13(Event 1 or 2) and ₹20(Both)
           </p> -->
@@ -414,9 +474,11 @@
             <p id="fileName"></p>
           </div> -->
 
-          <button class="register-btn" type="submit"> Pay & Register</button>
+          <button class="register-btn" type="submit">Pay & Register</button>
         </form>
       </div>
     </div>
+
+    <script src="script.js"></script>
   </body>
 </html>

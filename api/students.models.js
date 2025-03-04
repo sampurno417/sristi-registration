@@ -41,7 +41,6 @@ const studentSchema = new mongoose.Schema(
     },
     event: {
       type: String,
-      enum: ["event1", "event2", "both", "selected"],
     },
     collegeName: {
       type: String,
