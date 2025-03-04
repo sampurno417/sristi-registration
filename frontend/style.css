@@ -7,7 +7,6 @@
   background-color: black;
   color: rgb(226, 226, 202);
   font-family: Arial, sans-serif;
-  
 }
 
 .title {
@@ -33,6 +32,7 @@ select {
   color: red;
 }
 
+
 #payment {
   border-color: aliceblue;
   border-width: 2px;
@@ -51,7 +51,7 @@ select {
   transition: background-color 0.3s ease;
 }
 
-.register-btn:hover{
+.register-btn:hover {
   background-color: #014289;
 }
 
@@ -75,16 +75,17 @@ select {
   background-color: #218838;
 }
 
-.container{
+.container {
   display: flex;
   justify-content: center; /* Horizontally center */
+  max-height: 1300px;
   align-items: center; /* Vertically center */
 }
 .registration-form-container {
   display: flex;
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center */
-  height:1300px;
+  
   width: 600px;
   border: 2px solid #ccc;
   border-radius: 6px;
@@ -92,23 +93,21 @@ select {
 }
 
 .registration-form {
-  width: 100%; 
-  max-width: 500px; 
-  padding: 20px; 
-  box-sizing: border-box; 
-  
-  
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 .show-on-desktop {
-  display: block; /* Ensure it’s visible by default */ 
+  display: block; /* Ensure it’s visible by default */
   align-items: center;
   justify-content: center;
   display: flex;
 }
-.qr-img{
-  height:200px;
+.qr-img {
+  height: 200px;
   width: 200px;
-  
+
   margin-bottom: 10px;
 }
 
@@ -119,7 +118,6 @@ select {
 }
 .hide-on-desktop {
   display: none; /* Hide by default (for desktop) */
-  
 }
 
 @media (max-width: 768px) {
@@ -127,3 +125,51 @@ select {
     display: block; /* Show on mobile */
   }
 }
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.checkbox {
+  padding: 10px;
+  border: none;
+  background-color: rgb(55, 55, 55);
+  cursor: pointer;
+  transition: 0.3s;
+}
+button.selected {
+  background-color: #4CAF50; /* Change this to your desired selected color */
+  color: white;
+}
+
+#total{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #28a745; 
+}
+#total span{
+  color: #28a745;
+}
+
+.hidden {
+  display: none;
+  align-items: center;
+  justify-content: center; 
+}
+
+#text-container{
+  display: none;
+}
+
+
+
+
