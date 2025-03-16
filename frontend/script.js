@@ -37,8 +37,8 @@ function selectAll(button) {
     }
     //console.log(selectedButtons)
 
-    totalAmountElement.innerHTML = 2048;
-    totalAmount = 2048;
+    totalAmountElement.innerHTML = 2560;
+    totalAmount = 2560;
   }
 }
 
